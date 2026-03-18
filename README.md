@@ -1,4 +1,5 @@
 # Admin-Dashboard
 
 Live Link -  
-friendly-kitten-c20fcb.netlify.app
+
+https://friendly-kitten-c20fcb.netlify.app/
