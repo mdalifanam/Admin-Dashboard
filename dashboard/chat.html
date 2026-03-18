@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connectly Admin - Chat</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        * { transition: all 0.2s ease; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .sidebar-item { transition: all 0.2s; }
+        .submenu { transition: max-height 0.3s ease-out; overflow: hidden; max-height: 0; }
+        .submenu.open { max-height: 500px; }
+        .rotate { transform: rotate(180deg); }
+        .contact-item:hover { background-color: #f9fafb; }
+        .contact-item.active { background-color: #eef2ff; border-left: 4px solid #4f46e5; }
+        .message-bubble.sent { background-color: #4f46e5; color: white; border-bottom-right-radius: 4px; }
+        .message-bubble.received { background-color: #f3f4f6; color: #1f2937; border-bottom-left-radius: 4px; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar (same as redesigned pages) -->
+        <aside class="w-64 bg-white shadow-xl flex flex-col overflow-y-auto">
+            <div class="h-20 flex items-center justify-center border-b border-gray-100">
+                <i class="fas fa-bolt text-indigo-600 text-3xl mr-2"></i>
+                <span class="text-2xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Connectly</span>
+            </div>
+            <nav class="flex-1 py-6 px-3 space-y-1">
+                <!-- Dashboard -->
+                <a href="index.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group">
+                    <i class="fas fa-tachometer-alt w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Dashboard
+                </a>
+                <!-- Analytics -->
+                <a href="analytics.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group">
+                    <i class="fas fa-chart-line w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Analytics
+                </a>
+                <!-- Reports -->
+                <a href="reports.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group">
+                    <i class="fas fa-file-alt w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Reports
+                </a>
+                <!-- Activity -->
+                <a href="activity.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group">
+                    <i class="fas fa-clock w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Activity
+                </a>
+                <div class="border-t border-gray-200 my-4"></div>
+
+                <!-- Users Section -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group" onclick="toggleSubmenu('usersSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-users w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Users</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 group-hover:text-indigo-600 transition-transform"></i>
+                    </button>
+                    <div id="usersSubmenu" class="submenu pl-4">
+                        <a href="users.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">User List</a>
+                        <a href="user-details.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">User Details</a>
+                        <a href="user-edit.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Edit User</a>
+                        <a href="user-roles.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">User Roles</a>
+                        <a href="banned-users.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Banned Users</a>
+                    </div>
+                </div>
+
+                <!-- Posts Section -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group" onclick="toggleSubmenu('postsSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-newspaper w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Posts</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 group-hover:text-indigo-600 transition-transform"></i>
+                    </button>
+                    <div id="postsSubmenu" class="submenu pl-4">
+                        <a href="posts.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Posts List</a>
+                        <a href="post-details.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Post Details</a>
+                        <a href="create-post.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Create Post</a>
+                        <a href="edit-post.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Edit Post</a>
+                        <a href="comments.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Comments</a>
+                        <a href="reported-posts.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Reported Posts</a>
+                    </div>
+                </div>
+
+                <!-- Messages Section (active, open) -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-indigo-600 bg-indigo-50 rounded-xl sidebar-item shadow-sm" onclick="toggleSubmenu('messagesSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-envelope w-5 h-5 mr-3 text-indigo-600"></i>Messages</span>
+                        <i class="fas fa-chevron-down text-xs text-indigo-600 transition-transform rotate"></i>
+                    </button>
+                    <div id="messagesSubmenu" class="submenu open pl-4">
+                        <a href="messages.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Messages</a>
+                        <a href="chat.html" class="block px-4 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 rounded-lg">Chat</a>
+                        <a href="notifications.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Notifications</a>
+                        <a href="announcements.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Announcements</a>
+                    </div>
+                </div>
+
+                <!-- Products Section -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group" onclick="toggleSubmenu('productsSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-box w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Products</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 group-hover:text-indigo-600 transition-transform"></i>
+                    </button>
+                    <div id="productsSubmenu" class="submenu pl-4">
+                        <a href="products.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Products List</a>
+                        <a href="product-details.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Product Details</a>
+                        <a href="orders.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Orders</a>
+                        <a href="order-details.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Order Details</a>
+                        <a href="transactions.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Transactions</a>
+                    </div>
+                </div>
+
+                <!-- Coupons Section -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group" onclick="toggleSubmenu('couponsSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-tag w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Coupons</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 group-hover:text-indigo-600 transition-transform"></i>
+                    </button>
+                    <div id="couponsSubmenu" class="submenu pl-4">
+                        <a href="coupons.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Coupons</a>
+                        <a href="promotions.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Promotions</a>
+                        <a href="campaigns.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Campaigns</a>
+                    </div>
+                </div>
+
+                <!-- Revenue Section -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group" onclick="toggleSubmenu('revenueSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-dollar-sign w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Revenue</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 group-hover:text-indigo-600 transition-transform"></i>
+                    </button>
+                    <div id="revenueSubmenu" class="submenu pl-4">
+                        <a href="revenue.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Revenue</a>
+                        <a href="subscriptions.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Subscriptions</a>
+                        <a href="invoices.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Invoices</a>
+                        <a href="payments.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Payments</a>
+                    </div>
+                </div>
+
+                <!-- Tickets Section -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group" onclick="toggleSubmenu('ticketsSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-ticket-alt w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Tickets</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 group-hover:text-indigo-600 transition-transform"></i>
+                    </button>
+                    <div id="ticketsSubmenu" class="submenu pl-4">
+                        <a href="tickets.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Tickets</a>
+                        <a href="ticket-details.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Ticket Details</a>
+                        <a href="faq.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">FAQ</a>
+                        <a href="help-center.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Help Center</a>
+                    </div>
+                </div>
+
+                <!-- Settings Section -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group" onclick="toggleSubmenu('settingsSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-cog w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Settings</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 group-hover:text-indigo-600 transition-transform"></i>
+                    </button>
+                    <div id="settingsSubmenu" class="submenu pl-4">
+                        <a href="settings.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Settings</a>
+                        <a href="general-settings.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">General</a>
+                        <a href="security-settings.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Security</a>
+                        <a href="email-settings.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Email</a>
+                        <a href="integrations.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Integrations</a>
+                    </div>
+                </div>
+
+                <!-- Admin Profile Section -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group" onclick="toggleSubmenu('profileSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-user-cog w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Admin Profile</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 group-hover:text-indigo-600 transition-transform"></i>
+                    </button>
+                    <div id="profileSubmenu" class="submenu pl-4">
+                        <a href="admin-profile.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Profile</a>
+                        <a href="team.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Team</a>
+                        <a href="team-member.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Team Member</a>
+                    </div>
+                </div>
+
+                <!-- Authentication Section -->
+                <div class="border-t border-gray-200 my-4 pt-4">
+                    <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Authentication</p>
+                </div>
+                <a href="login.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group">
+                    <i class="fas fa-sign-in-alt w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Login
+                </a>
+                <a href="register.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group">
+                    <i class="fas fa-user-plus w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Register
+                </a>
+                <a href="forgot-password.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group">
+                    <i class="fas fa-key w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Forgot Password
+                </a>
+                <a href="reset-password.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group">
+                    <i class="fas fa-lock w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Reset Password
+                </a>
+            </nav>
+            <div class="p-4 border-t border-gray-100 bg-gray-50">
+                <div class="flex items-center">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff&size=40" alt="Admin" class="w-10 h-10 rounded-full object-cover ring-2 ring-indigo-200">
+                    <div class="ml-3">
+                        <p class="text-sm font-semibold text-gray-800">Admin User</p>
+                        <p class="text-xs text-gray-500">admin@connectly.com</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header class="bg-white shadow-sm h-20 flex items-center justify-between px-8">
+                <button class="text-gray-500 focus:outline-none md:hidden" id="menuButton">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+                <div class="flex-1 max-w-md ml-4 md:ml-0">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" placeholder="Search messages..." class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-50">
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="relative p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full ring-2 ring-white"></span>
+                    </button>
+                    <button class="relative p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition">
+                        <i class="fas fa-envelope text-xl"></i>
+                        <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-indigo-500 rounded-full ring-2 ring-white"></span>
+                    </button>
+                    <div class="relative">
+                        <button class="flex items-center space-x-3 focus:outline-none group" id="userMenuButton">
+                            <img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff&size=40" alt="Admin" class="w-10 h-10 rounded-full object-cover ring-2 ring-indigo-200 group-hover:ring-indigo-400">
+                            <span class="hidden md:block text-sm font-medium text-gray-700">Admin</span>
+                            <i class="fas fa-chevron-down hidden md:block text-xs text-gray-500 group-hover:text-indigo-600"></i>
+                        </button>
+                        <div id="userDropdown" class="hidden absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-lg py-1 z-10 border border-gray-100">
+                            <a href="admin-profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">Your Profile</a>
+                            <a href="settings.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">Settings</a>
+                            <hr class="my-1">
+                            <a href="login.html" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">Sign out</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Chat Content -->
+            <main class="flex-1 overflow-y-hidden bg-gray-50 p-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6">Live Chat</h1>
+
+                <!-- Chat Interface -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col lg:flex-row h-[calc(100vh-220px)]">
+                    <!-- Contacts Sidebar -->
+                    <div class="lg:w-1/4 border-r border-gray-100 flex flex-col">
+                        <div class="p-4 border-b border-gray-100">
+                            <div class="relative">
+                                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" placeholder="Search contacts..." class="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            </div>
+                        </div>
+                        <div class="flex-1 overflow-y-auto">
+                            <!-- Contact active -->
+                            <div class="flex items-center p-4 contact-item active cursor-pointer">
+                                <div class="relative">
+                                    <img src="https://ui-avatars.com/api/?name=John+Doe&background=4f46e5&color=fff&size=40" alt="" class="w-10 h-10 rounded-full object-cover">
+                                    <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full ring-2 ring-white"></span>
+                                </div>
+                                <div class="ml-3 flex-1 min-w-0">
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-sm font-semibold text-gray-900">John Doe</p>
+                                        <p class="text-xs text-gray-500">10:30 AM</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500 truncate">Can you help me with my account?</p>
+                                </div>
+                            </div>
+                            <!-- Contact away -->
+                            <div class="flex items-center p-4 contact-item cursor-pointer hover:bg-gray-50">
+                                <div class="relative">
+                                    <img src="https://ui-avatars.com/api/?name=Jane+Smith&background=10b981&color=fff&size=40" alt="" class="w-10 h-10 rounded-full object-cover">
+                                    <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-yellow-500 rounded-full ring-2 ring-white"></span>
+                                </div>
+                                <div class="ml-3 flex-1 min-w-0">
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-sm font-medium text-gray-900">Jane Smith</p>
+                                        <p class="text-xs text-gray-500">Yesterday</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500 truncate">Thanks for the update!</p>
+                                </div>
+                            </div>
+                            <!-- Contact offline -->
+                            <div class="flex items-center p-4 contact-item cursor-pointer hover:bg-gray-50">
+                                <div class="relative">
+                                    <img src="https://ui-avatars.com/api/?name=Bob+Johnson&background=f59e0b&color=fff&size=40" alt="" class="w-10 h-10 rounded-full object-cover">
+                                    <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-gray-400 rounded-full ring-2 ring-white"></span>
+                                </div>
+                                <div class="ml-3 flex-1 min-w-0">
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-sm font-medium text-gray-900">Bob Johnson</p>
+                                        <p class="text-xs text-gray-500">2 days ago</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500 truncate">See you tomorrow</p>
+                                </div>
+                            </div>
+                            <!-- Contact online -->
+                            <div class="flex items-center p-4 contact-item cursor-pointer hover:bg-gray-50">
+                                <div class="relative">
+                                    <img src="https://ui-avatars.com/api/?name=Alice+Brown&background=ef4444&color=fff&size=40" alt="" class="w-10 h-10 rounded-full object-cover">
+                                    <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full ring-2 ring-white"></span>
+                                </div>
+                                <div class="ml-3 flex-1 min-w-0">
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-sm font-medium text-gray-900">Alice Brown</p>
+                                        <p class="text-xs text-gray-500">3:15 PM</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500 truncate">Hey, are you free?</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Area -->
+                    <div class="lg:w-3/4 flex flex-col">
+                        <!-- Chat Header -->
+                        <div class="flex items-center justify-between p-4 border-b border-gray-100">
+                            <div class="flex items-center">
+                                <img src="https://ui-avatars.com/api/?name=John+Doe&background=4f46e5&color=fff&size=40" alt="" class="w-10 h-10 rounded-full object-cover">
+                                <div class="ml-3">
+                                    <p class="text-sm font-semibold text-gray-900">John Doe</p>
+                                    <p class="text-xs text-green-600"><i class="fas fa-circle text-xs mr-1"></i> Online</p>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition"><i class="fas fa-phone"></i></button>
+                                <button class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition"><i class="fas fa-video"></i></button>
+                                <button class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition"><i class="fas fa-ellipsis-v"></i></button>
+                            </div>
+                        </div>
+                        <!-- Messages Area -->
+                        <div class="flex-1 overflow-y-auto p-6 space-y-4">
+                            <!-- Received message -->
+                            <div class="flex items-start">
+                                <img src="https://ui-avatars.com/api/?name=John+Doe&background=4f46e5&color=fff&size=32" alt="" class="w-8 h-8 rounded-full object-cover">
+                                <div class="ml-3 max-w-[70%]">
+                                    <div class="message-bubble received rounded-2xl px-4 py-2">
+                                        <p class="text-sm">Hi Admin, I'm having trouble logging into my account. Can you help?</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">10:30 AM</p>
+                                </div>
+                            </div>
+                            <!-- Sent message -->
+                            <div class="flex items-start justify-end">
+                                <div class="mr-3 max-w-[70%]">
+                                    <div class="message-bubble sent rounded-2xl px-4 py-2">
+                                        <p class="text-sm">Of course, John. What seems to be the problem?</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1 text-right">10:32 AM</p>
+                                </div>
+                                <img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff&size=32" alt="" class="w-8 h-8 rounded-full object-cover">
+                            </div>
+                            <!-- Received message -->
+                            <div class="flex items-start">
+                                <img src="https://ui-avatars.com/api/?name=John+Doe&background=4f46e5&color=fff&size=32" alt="" class="w-8 h-8 rounded-full object-cover">
+                                <div class="ml-3 max-w-[70%]">
+                                    <div class="message-bubble received rounded-2xl px-4 py-2">
+                                        <p class="text-sm">I forgot my password and the reset email isn't coming through.</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">10:33 AM</p>
+                                </div>
+                            </div>
+                            <!-- Sent message -->
+                            <div class="flex items-start justify-end">
+                                <div class="mr-3 max-w-[70%]">
+                                    <div class="message-bubble sent rounded-2xl px-4 py-2">
+                                        <p class="text-sm">I've reset your password manually. Check your email for a temporary password.</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1 text-right">10:35 AM</p>
+                                </div>
+                                <img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff&size=32" alt="" class="w-8 h-8 rounded-full object-cover">
+                            </div>
+                            <!-- Received message -->
+                            <div class="flex items-start">
+                                <img src="https://ui-avatars.com/api/?name=John+Doe&background=4f46e5&color=fff&size=32" alt="" class="w-8 h-8 rounded-full object-cover">
+                                <div class="ml-3 max-w-[70%]">
+                                    <div class="message-bubble received rounded-2xl px-4 py-2">
+                                        <p class="text-sm">Got it, thank you so much! I'm logged in now.</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">10:37 AM</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Message Input -->
+                        <div class="border-t border-gray-100 p-4">
+                            <div class="flex items-center space-x-2">
+                                <button class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition"><i class="fas fa-paperclip"></i></button>
+                                <input type="text" placeholder="Type a message..." class="flex-1 border border-gray-200 rounded-full px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                <button class="p-2 text-white bg-indigo-600 rounded-full hover:bg-indigo-700 transition"><i class="fas fa-paper-plane"></i></button>
+                                <button class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition"><i class="fas fa-smile"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Submenu toggle function
+        function toggleSubmenu(id, button) {
+            const submenu = document.getElementById(id);
+            const icon = button.querySelector('.fa-chevron-down');
+            submenu.classList.toggle('open');
+            icon.classList.toggle('rotate');
+        }
+
+        // Mobile sidebar toggle
+        const menuButton = document.getElementById('menuButton');
+        const sidebar = document.querySelector('aside');
+        if (menuButton) {
+            menuButton.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+                sidebar.classList.toggle('absolute');
+                sidebar.classList.toggle('z-50');
+                sidebar.classList.toggle('w-64');
+            });
+        }
+
+        // User dropdown
+        const userMenuButton = document.getElementById('userMenuButton');
+        const userDropdown = document.getElementById('userDropdown');
+        userMenuButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userDropdown.classList.toggle('hidden');
+        });
+        document.addEventListener('click', () => {
+            userDropdown.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

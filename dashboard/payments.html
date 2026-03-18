@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connectly Admin - Payments</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        * { transition: all 0.2s ease; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .sidebar-item { transition: all 0.2s; }
+        .submenu { transition: max-height 0.3s ease-out; overflow: hidden; max-height: 0; }
+        .submenu.open { max-height: 500px; }
+        .rotate { transform: rotate(180deg); }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-xl flex flex-col overflow-y-auto">
+            <div class="h-20 flex items-center justify-center border-b border-gray-100">
+                <i class="fas fa-bolt text-indigo-600 text-3xl mr-2"></i>
+                <span class="text-2xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Connectly</span>
+            </div>
+            <nav class="flex-1 py-6 px-3 space-y-1">
+                <!-- Dashboard -->
+                <a href="index.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group">
+                    <i class="fas fa-tachometer-alt w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Dashboard
+                </a>
+                <!-- Analytics -->
+                <a href="analytics.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group">
+                    <i class="fas fa-chart-line w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Analytics
+                </a>
+                <!-- Reports -->
+                <a href="reports.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group">
+                    <i class="fas fa-file-alt w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Reports
+                </a>
+                <!-- Activity -->
+                <a href="activity.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group">
+                    <i class="fas fa-clock w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Activity
+                </a>
+                <div class="border-t border-gray-200 my-4"></div>
+
+                <!-- Users Section -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group" onclick="toggleSubmenu('usersSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-users w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Users</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 group-hover:text-indigo-600 transition-transform"></i>
+                    </button>
+                    <div id="usersSubmenu" class="submenu pl-4">
+                        <a href="users.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">User List</a>
+                        <a href="user-details.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">User Details</a>
+                        <a href="user-edit.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Edit User</a>
+                        <a href="user-roles.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">User Roles</a>
+                        <a href="banned-users.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Banned Users</a>
+                    </div>
+                </div>
+
+                <!-- Posts Section -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group" onclick="toggleSubmenu('postsSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-newspaper w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Posts</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 group-hover:text-indigo-600 transition-transform"></i>
+                    </button>
+                    <div id="postsSubmenu" class="submenu pl-4">
+                        <a href="posts.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Posts List</a>
+                        <a href="post-details.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Post Details</a>
+                        <a href="create-post.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Create Post</a>
+                        <a href="edit-post.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Edit Post</a>
+                        <a href="comments.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Comments</a>
+                        <a href="reported-posts.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Reported Posts</a>
+                    </div>
+                </div>
+
+                <!-- Messages Section -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group" onclick="toggleSubmenu('messagesSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-envelope w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Messages</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 group-hover:text-indigo-600 transition-transform"></i>
+                    </button>
+                    <div id="messagesSubmenu" class="submenu pl-4">
+                        <a href="messages.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Messages</a>
+                        <a href="chat.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Chat</a>
+                        <a href="notifications.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Notifications</a>
+                        <a href="announcements.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Announcements</a>
+                    </div>
+                </div>
+
+                <!-- Products Section -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group" onclick="toggleSubmenu('productsSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-box w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Products</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 group-hover:text-indigo-600 transition-transform"></i>
+                    </button>
+                    <div id="productsSubmenu" class="submenu pl-4">
+                        <a href="products.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Products List</a>
+                        <a href="product-details.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Product Details</a>
+                        <a href="orders.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Orders</a>
+                        <a href="order-details.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Order Details</a>
+                        <a href="transactions.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Transactions</a>
+                    </div>
+                </div>
+
+                <!-- Coupons Section -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group" onclick="toggleSubmenu('couponsSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-tag w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Coupons</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 group-hover:text-indigo-600 transition-transform"></i>
+                    </button>
+                    <div id="couponsSubmenu" class="submenu pl-4">
+                        <a href="coupons.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Coupons</a>
+                        <a href="promotions.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Promotions</a>
+                        <a href="campaigns.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Campaigns</a>
+                    </div>
+                </div>
+
+                <!-- Revenue Section (active, open) -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-indigo-600 bg-indigo-50 rounded-xl sidebar-item shadow-sm" onclick="toggleSubmenu('revenueSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-dollar-sign w-5 h-5 mr-3 text-indigo-600"></i>Revenue</span>
+                        <i class="fas fa-chevron-down text-xs text-indigo-600 transition-transform rotate"></i>
+                    </button>
+                    <div id="revenueSubmenu" class="submenu open pl-4">
+                        <a href="revenue.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Revenue</a>
+                        <a href="subscriptions.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Subscriptions</a>
+                        <a href="invoices.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Invoices</a>
+                        <a href="payments.html" class="block px-4 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 rounded-lg">Payments</a>
+                    </div>
+                </div>
+
+                <!-- Tickets Section -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group" onclick="toggleSubmenu('ticketsSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-ticket-alt w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Tickets</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 group-hover:text-indigo-600 transition-transform"></i>
+                    </button>
+                    <div id="ticketsSubmenu" class="submenu pl-4">
+                        <a href="tickets.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Tickets</a>
+                        <a href="ticket-details.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Ticket Details</a>
+                        <a href="faq.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">FAQ</a>
+                        <a href="help-center.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Help Center</a>
+                    </div>
+                </div>
+
+                <!-- Settings Section -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group" onclick="toggleSubmenu('settingsSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-cog w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Settings</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 group-hover:text-indigo-600 transition-transform"></i>
+                    </button>
+                    <div id="settingsSubmenu" class="submenu pl-4">
+                        <a href="settings.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Settings</a>
+                        <a href="general-settings.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">General</a>
+                        <a href="security-settings.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Security</a>
+                        <a href="email-settings.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Email</a>
+                        <a href="integrations.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Integrations</a>
+                    </div>
+                </div>
+
+                <!-- Admin Profile Section -->
+                <div>
+                    <button class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group" onclick="toggleSubmenu('profileSubmenu', this)">
+                        <span class="flex items-center"><i class="fas fa-user-cog w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Admin Profile</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 group-hover:text-indigo-600 transition-transform"></i>
+                    </button>
+                    <div id="profileSubmenu" class="submenu pl-4">
+                        <a href="admin-profile.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Profile</a>
+                        <a href="team.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Team</a>
+                        <a href="team-member.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg">Team Member</a>
+                    </div>
+                </div>
+
+                <!-- Authentication Section -->
+                <div class="border-t border-gray-200 my-4 pt-4">
+                    <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Authentication</p>
+                </div>
+                <a href="login.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group">
+                    <i class="fas fa-sign-in-alt w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Login
+                </a>
+                <a href="register.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group">
+                    <i class="fas fa-user-plus w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Register
+                </a>
+                <a href="forgot-password.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group">
+                    <i class="fas fa-key w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Forgot Password
+                </a>
+                <a href="reset-password.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 sidebar-item group">
+                    <i class="fas fa-lock w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-600"></i>Reset Password
+                </a>
+            </nav>
+            <div class="p-4 border-t border-gray-100 bg-gray-50">
+                <div class="flex items-center">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff&size=40" alt="Admin" class="w-10 h-10 rounded-full object-cover ring-2 ring-indigo-200">
+                    <div class="ml-3">
+                        <p class="text-sm font-semibold text-gray-800">Admin User</p>
+                        <p class="text-xs text-gray-500">admin@connectly.com</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header class="bg-white shadow-sm h-20 flex items-center justify-between px-8">
+                <button class="text-gray-500 focus:outline-none md:hidden" id="menuButton">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+                <div class="flex-1 max-w-md ml-4 md:ml-0">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" placeholder="Search payments..." class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-50">
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="relative p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full ring-2 ring-white"></span>
+                    </button>
+                    <button class="relative p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition">
+                        <i class="fas fa-envelope text-xl"></i>
+                        <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-indigo-500 rounded-full ring-2 ring-white"></span>
+                    </button>
+                    <div class="relative">
+                        <button class="flex items-center space-x-3 focus:outline-none group" id="userMenuButton">
+                            <img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff&size=40" alt="Admin" class="w-10 h-10 rounded-full object-cover ring-2 ring-indigo-200 group-hover:ring-indigo-400">
+                            <span class="hidden md:block text-sm font-medium text-gray-700">Admin</span>
+                            <i class="fas fa-chevron-down hidden md:block text-xs text-gray-500 group-hover:text-indigo-600"></i>
+                        </button>
+                        <div id="userDropdown" class="hidden absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-lg py-1 z-10 border border-gray-100">
+                            <a href="admin-profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">Your Profile</a>
+                            <a href="settings.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">Settings</a>
+                            <hr class="my-1">
+                            <a href="login.html" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">Sign out</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Payments Content -->
+            <main class="flex-1 overflow-y-auto bg-gray-50 p-8">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800 mb-2">Payments</h1>
+                        <p class="text-gray-500">Monitor and manage all payment transactions.</p>
+                    </div>
+                    <div class="mt-4 sm:mt-0">
+                        <button class="px-5 py-2.5 border border-gray-200 text-gray-700 text-sm font-medium rounded-xl bg-white hover:bg-gray-50 transition">
+                            <i class="fas fa-download mr-2"></i> Export Report
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Payment Summary Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white rounded-2xl shadow-sm p-6 stat-card border border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500 font-medium">Total Payments</p>
+                                <p class="text-2xl font-bold text-gray-800 mt-1">1,245</p>
+                                <p class="text-xs text-green-600 mt-2 flex items-center"><i class="fas fa-arrow-up mr-1"></i> 8.2% vs last month</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white shadow-lg">
+                                <i class="fas fa-credit-card text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-sm p-6 stat-card border border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500 font-medium">Total Amount</p>
+                                <p class="text-2xl font-bold text-gray-800 mt-1">$124,567</p>
+                                <p class="text-xs text-green-600 mt-2 flex items-center"><i class="fas fa-arrow-up mr-1"></i> 12.3% vs last month</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg">
+                                <i class="fas fa-dollar-sign text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-sm p-6 stat-card border border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500 font-medium">Successful</p>
+                                <p class="text-2xl font-bold text-gray-800 mt-1">1,189</p>
+                                <p class="text-xs text-green-600 mt-2 flex items-center"><i class="fas fa-check-circle mr-1"></i> 95.5% success rate</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-600 text-white shadow-lg">
+                                <i class="fas fa-check text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-sm p-6 stat-card border border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500 font-medium">Failed/Refunded</p>
+                                <p class="text-2xl font-bold text-gray-800 mt-1">56</p>
+                                <p class="text-xs text-red-600 mt-2 flex items-center"><i class="fas fa-exclamation-circle mr-1"></i> 4.5% of total</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 text-white shadow-lg">
+                                <i class="fas fa-times-circle text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 mb-2">Status</label>
+                            <select class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-50">
+                                <option>All Status</option>
+                                <option>Completed</option>
+                                <option>Pending</option>
+                                <option>Failed</option>
+                                <option>Refunded</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 mb-2">Payment Method</label>
+                            <select class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-50">
+                                <option>All Methods</option>
+                                <option>Credit Card</option>
+                                <option>PayPal</option>
+                                <option>Bank Transfer</option>
+                                <option>Cash</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 mb-2">Date Range</label>
+                            <select class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-50">
+                                <option>Last 30 days</option>
+                                <option>This month</option>
+                                <option>Last month</option>
+                                <option>Custom</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button class="w-full bg-indigo-600 text-white px-4 py-3 rounded-xl text-sm font-medium hover:bg-indigo-700 transition">
+                                <i class="fas fa-filter mr-2"></i> Apply Filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payments Table -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Payment ID</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Customer</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Method</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Amount</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-indigo-600">#PAY-001</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <img src="https://ui-avatars.com/api/?name=John+Doe&background=4f46e5&color=fff&size=32" alt="" class="w-8 h-8 rounded-full object-cover">
+                                            <span class="ml-3 text-sm text-gray-900">John Doe</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Jun 15, 2023</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Visa ****4242</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">$234.97</td>
+                                    <td class="px-6 py-4 whitespace-nowrap"><span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Completed</span></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button class="text-indigo-600 hover:text-indigo-800 mr-3"><i class="fas fa-eye"></i></button>
+                                        <button class="text-gray-400 hover:text-gray-600"><i class="fas fa-ellipsis-v"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-indigo-600">#PAY-002</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <img src="https://ui-avatars.com/api/?name=Jane+Smith&background=10b981&color=fff&size=32" alt="" class="w-8 h-8 rounded-full object-cover">
+                                            <span class="ml-3 text-sm text-gray-900">Jane Smith</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Jun 14, 2023</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">PayPal</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">$159.98</td>
+                                    <td class="px-6 py-4 whitespace-nowrap"><span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Completed</span></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button class="text-indigo-600 hover:text-indigo-800 mr-3"><i class="fas fa-eye"></i></button>
+                                        <button class="text-gray-400 hover:text-gray-600"><i class="fas fa-ellipsis-v"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-indigo-600">#PAY-003</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <img src="https://ui-avatars.com/api/?name=Bob+Johnson&background=f59e0b&color=fff&size=32" alt="" class="w-8 h-8 rounded-full object-cover">
+                                            <span class="ml-3 text-sm text-gray-900">Bob Johnson</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Jun 13, 2023</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Bank Transfer</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">$89.99</td>
+                                    <td class="px-6 py-4 whitespace-nowrap"><span class="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button class="text-indigo-600 hover:text-indigo-800 mr-3"><i class="fas fa-eye"></i></button>
+                                        <button class="text-gray-400 hover:text-gray-600"><i class="fas fa-ellipsis-v"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-indigo-600">#PAY-004</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <img src="https://ui-avatars.com/api/?name=Alice+Brown&background=ef4444&color=fff&size=32" alt="" class="w-8 h-8 rounded-full object-cover">
+                                            <span class="ml-3 text-sm text-gray-900">Alice Brown</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Jun 12, 2023</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Visa ****1111</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">$64.98</td>
+                                    <td class="px-6 py-4 whitespace-nowrap"><span class="px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Failed</span></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button class="text-indigo-600 hover:text-indigo-800 mr-3"><i class="fas fa-eye"></i></button>
+                                        <button class="text-gray-400 hover:text-gray-600"><i class="fas fa-ellipsis-v"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+                        <p class="text-sm text-gray-600">Showing 1 to 4 of 24 results</p>
+                        <nav class="flex items-center space-x-2">
+                            <a href="#" class="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition">Previous</a>
+                            <a href="#" class="px-3 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition">1</a>
+                            <a href="#" class="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition">2</a>
+                            <a href="#" class="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition">3</a>
+                            <a href="#" class="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition">Next</a>
+                        </nav>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Submenu toggle function
+        function toggleSubmenu(id, button) {
+            const submenu = document.getElementById(id);
+            const icon = button.querySelector('.fa-chevron-down');
+            submenu.classList.toggle('open');
+            icon.classList.toggle('rotate');
+        }
+
+        // Mobile sidebar toggle
+        const menuButton = document.getElementById('menuButton');
+        const sidebar = document.querySelector('aside');
+        if (menuButton) {
+            menuButton.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+                sidebar.classList.toggle('absolute');
+                sidebar.classList.toggle('z-50');
+                sidebar.classList.toggle('w-64');
+            });
+        }
+
+        // User dropdown
+        const userMenuButton = document.getElementById('userMenuButton');
+        const userDropdown = document.getElementById('userDropdown');
+        userMenuButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userDropdown.classList.toggle('hidden');
+        });
+        document.addEventListener('click', () => {
+            userDropdown.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
